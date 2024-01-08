@@ -1,0 +1,13 @@
+{
+  "name": "advice-generator-app",
+  "private": true,
+  "scripts": {
+    "build": "npx elm make --output dist/elm.js src/Main.elm",
+    "dev": "npx elm-live src/Main.elm --path-to-elm=./node_modules/.bin/elm --start-page=index.html --port=3000 --hot -- --output=./dist/elm.js"
+  },
+  "devDependencies": {
+    "elm": "^0.19.1-6",
+    "elm-format": "^0.8.7",
+    "elm-live": "^4.0.2"
+  }
+}
