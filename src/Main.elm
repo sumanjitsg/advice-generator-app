@@ -2,6 +2,7 @@ module Main exposing (main)
 
 import Browser
 import Html exposing (..)
+import Html.Attributes exposing (alt, class, src)
 import Http
 import Json.Decode as Decode exposing (Decoder)
 
@@ -76,13 +77,25 @@ view : Model -> Html Msg
 view model =
     case model of
         Error ->
-            div [] [ text "Error!" ]
+            main_ [] [ p [] [ text "Error!" ] ]
 
         Loading ->
-            div [] [ text "Loading..." ]
+            main_ [] [ p [] [ text "Loading..." ] ]
 
         Success advice ->
-            div [] [ text advice.text ]
+            main_ []
+                [ div {- card container -} [ class "card-container" ]
+                    [ h1 []
+                        [ text ("ADVICE #" ++ String.fromInt advice.id) ]
+                    , p []
+                        [ text ("\"" ++ advice.text ++ "\"") ]
+                    , img [ src "../public/images/pattern-divider-desktop.svg", alt "" ] []
+                    ]
+                , div {- button container -} [ class "btn-container" ]
+                    [ button []
+                        [ img [ src "../public/images/icon-dice.svg", alt "" ] [] ]
+                    ]
+                ]
 
 
 
