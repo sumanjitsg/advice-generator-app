@@ -48,7 +48,7 @@ button {
 }
 
 @media (hover: hover) {
-  button:hover {
+  button:hover:not(:active) {
     filter: drop-shadow(0 0 10px var(--neon-green, #53ffaa));
   }
 }
