@@ -94,7 +94,7 @@ view model =
                         [ text ("ADVICE #" ++ String.fromInt advice.id) ]
                     , p []
                         [ text ("\"" ++ advice.text ++ "\"") ]
-                    , img [ src "../public/images/pattern-divider-desktop.svg", alt "" ] []
+                    , div [ class "pattern-divider" ] []
                     ]
                 , div {- button container -} [ class "btn-container" ]
                     [ button [ onClick Clicked ]

@@ -20,6 +20,10 @@ body {
   box-sizing: border-box;
 }
 
+main {
+  max-width: 540px;
+}
+
 img {
   max-width: 100%;
   height: auto;
@@ -43,6 +47,10 @@ button {
   justify-content: center;
 }
 
+button:hover {
+  filter: drop-shadow(0 0 10px var(--neon-green, #53ffaa));
+}
+
 .card-container {
   background-color: var(--dark-grayish-blue, #313a48);
   padding: 2.5rem 1.5rem 4rem;
@@ -51,6 +59,19 @@ button {
 
 .card-container > * + * {
   margin-top: 1.5rem; /* 24px */
+}
+
+.pattern-divider {
+  background-image: url("public/images/pattern-divider-mobile.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 16px;
+}
+
+@media (width > 375px) {
+  .pattern-divider {
+    background-image: url("public/images/pattern-divider-desktop.svg");
+  }
 }
 
 .btn-container {
