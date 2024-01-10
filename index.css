@@ -47,8 +47,10 @@ button {
   justify-content: center;
 }
 
-button:hover {
-  filter: drop-shadow(0 0 10px var(--neon-green, #53ffaa));
+@media (hover: hover) {
+  button:hover {
+    filter: drop-shadow(0 0 10px var(--neon-green, #53ffaa));
+  }
 }
 
 .card-container {
