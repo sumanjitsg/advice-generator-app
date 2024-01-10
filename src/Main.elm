@@ -3,6 +3,7 @@ module Main exposing (main)
 import Browser
 import Html exposing (..)
 import Html.Attributes exposing (alt, class, src)
+import Html.Events exposing (onClick)
 import Http
 import Json.Decode as Decode exposing (Decoder)
 
@@ -48,16 +49,20 @@ init _ =
 
 type Msg
     = GotAdvice (Result Http.Error Advice)
+    | Clicked
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update msg _ =
+update msg model =
     case msg of
         GotAdvice (Ok advice) ->
             ( Success advice, Cmd.none )
 
         GotAdvice (Err _) ->
             ( Error, Cmd.none )
+
+        Clicked ->
+            ( model, getAdvice )
 
 
 
@@ -92,7 +97,7 @@ view model =
                     , img [ src "../public/images/pattern-divider-desktop.svg", alt "" ] []
                     ]
                 , div {- button container -} [ class "btn-container" ]
-                    [ button []
+                    [ button [ onClick Clicked ]
                         [ img [ src "../public/images/icon-dice.svg", alt "" ] [] ]
                     ]
                 ]
