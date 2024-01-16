@@ -125,7 +125,6 @@ view model =
                     [ Phosphor.shieldWarning Phosphor.Regular
                         |> Phosphor.withSize 4
                         |> Phosphor.withSizeUnit "rem"
-                        |> Phosphor.withClass "error"
                         |> Phosphor.toHtml []
                     , div [] [ text "Something went wrong. Check console for more info." ]
                     ]
