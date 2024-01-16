@@ -2,7 +2,7 @@ module Main exposing (main)
 
 import Browser
 import Html exposing (..)
-import Html.Attributes exposing (alt, class, classList, src)
+import Html.Attributes exposing (alt, class, classList, disabled, src)
 import Html.Events exposing (on, onClick)
 import Http
 import Json.Decode as Decode exposing (Decoder)
@@ -28,11 +28,12 @@ main =
 
 
 type Model
-    = Error
-    | Loading
-    | Success
+    = ErrorPage
+    | LoadingPage
+    | HomePage
         { advice : Advice
-        , isPointerOver : Bool
+        , isFetching : Bool
+        , isPointerOverButton : Bool
         }
 
 
@@ -44,7 +45,7 @@ type alias Advice =
 
 init : () -> ( Model, Cmd Msg )
 init _ =
-    ( Loading, getAdvice )
+    ( LoadingPage, getAdvice )
 
 
 
@@ -53,7 +54,7 @@ init _ =
 
 type Msg
     = GotAdvice (Result Http.Error Advice)
-    | ButtonClicked
+    | GetAdvice
     | PointerOver
     | PointerOut
 
@@ -61,35 +62,51 @@ type Msg
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        GotAdvice (Ok advice) ->
-            case model of
-                Loading ->
-                    ( Success { advice = advice, isPointerOver = False }, Cmd.none )
+        GotAdvice result ->
+            case result of
+                Ok advice ->
+                    case model of
+                        HomePage state ->
+                            ( HomePage
+                                { state
+                                    | advice = advice
+                                    , isFetching = False
+                                }
+                            , Cmd.none
+                            )
 
-                Success state ->
-                    ( Success { state | advice = advice }, Cmd.none )
+                        _ ->
+                            ( HomePage
+                                { advice = advice
+                                , isPointerOverButton = False
+                                , isFetching = False
+                                }
+                            , Cmd.none
+                            )
+
+                Err _ ->
+                    ( ErrorPage, Cmd.none )
+
+        GetAdvice ->
+            case model of
+                HomePage state ->
+                    ( HomePage { state | isFetching = True }, getAdvice )
 
                 _ ->
                     ( model, Cmd.none )
 
-        GotAdvice (Err _) ->
-            ( Error, Cmd.none )
-
-        ButtonClicked ->
-            ( model, getAdvice )
-
         PointerOver ->
             case model of
-                Success state ->
-                    ( Success { state | isPointerOver = True }, Cmd.none )
+                HomePage state ->
+                    ( HomePage { state | isPointerOverButton = True }, Cmd.none )
 
                 _ ->
                     ( model, Cmd.none )
 
         PointerOut ->
             case model of
-                Success state ->
-                    ( Success { state | isPointerOver = False }, Cmd.none )
+                HomePage state ->
+                    ( HomePage { state | isPointerOverButton = False }, Cmd.none )
 
                 _ ->
                     ( model, Cmd.none )
@@ -125,7 +142,7 @@ onPointerOut msg =
 view : Model -> Html Msg
 view model =
     case model of
-        Error ->
+        ErrorPage ->
             main_ []
                 [ p [ class "error" ]
                     [ Phosphor.shieldWarning Phosphor.Regular
@@ -137,7 +154,7 @@ view model =
                     ]
                 ]
 
-        Loading ->
+        LoadingPage ->
             main_ []
                 [ p []
                     [ Phosphor.circleNotch Phosphor.Regular
@@ -148,7 +165,7 @@ view model =
                     ]
                 ]
 
-        Success state ->
+        HomePage state ->
             main_ []
                 [ div {- card container -} [ class "card-container" ]
                     [ h1 []
@@ -161,8 +178,9 @@ view model =
                     [ button
                         [ onPointerOver PointerOver
                         , onPointerOut PointerOut
-                        , onClick ButtonClicked
-                        , classList [ ( "pointer-over", state.isPointerOver ) ]
+                        , onClick GetAdvice
+                        , classList [ ( "pointer-over", state.isPointerOverButton ) ]
+                        , disabled state.isFetching
                         ]
                         [ img [ src "../public/images/icon-dice.svg", alt "" ] [] ]
                     ]

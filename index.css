@@ -47,7 +47,12 @@ button {
   justify-content: center;
 }
 
-.pointer-over {
+button:disabled {
+  cursor: not-allowed;
+  background-color: var(--dark-gray, #808080);
+}
+
+button:not(:disabled).pointer-over {
   filter: drop-shadow(0 0 10px var(--neon-green, #53ffaa));
 }
 
