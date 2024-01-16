@@ -119,28 +119,6 @@ update msg model =
 view : Model -> Html Msg
 view model =
     case model of
-        ErrorPage ->
-            main_ []
-                [ p [ class "error" ]
-                    [ Phosphor.shieldWarning Phosphor.Regular
-                        |> Phosphor.withSize 4
-                        |> Phosphor.withSizeUnit "rem"
-                        |> Phosphor.toHtml []
-                    , div [] [ text "Something went wrong. Check console for more info." ]
-                    ]
-                ]
-
-        LoadingPage ->
-            main_ []
-                [ p []
-                    [ Phosphor.circleNotch Phosphor.Regular
-                        |> Phosphor.withSize 4
-                        |> Phosphor.withSizeUnit "rem"
-                        |> Phosphor.withClass "loading"
-                        |> Phosphor.toHtml []
-                    ]
-                ]
-
         HomePage state ->
             main_ []
                 [ div {- card container -} [ class "card-container" ]
@@ -159,6 +137,28 @@ view model =
                         , disabled state.isFetching
                         ]
                         [ img [ src "../public/images/icon-dice.svg", alt "" ] [] ]
+                    ]
+                ]
+
+        LoadingPage ->
+            main_ []
+                [ p []
+                    [ Phosphor.circleNotch Phosphor.Regular
+                        |> Phosphor.withSize 4
+                        |> Phosphor.withSizeUnit "rem"
+                        |> Phosphor.withClass "loading"
+                        |> Phosphor.toHtml []
+                    ]
+                ]
+
+        ErrorPage ->
+            main_ []
+                [ p [ class "error" ]
+                    [ Phosphor.shieldWarning Phosphor.Regular
+                        |> Phosphor.withSize 4
+                        |> Phosphor.withSizeUnit "rem"
+                        |> Phosphor.toHtml []
+                    , div [] [ text "Something went wrong. Check console for more info." ]
                     ]
                 ]
 
