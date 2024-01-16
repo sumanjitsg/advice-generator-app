@@ -2,8 +2,8 @@ module Main exposing (main)
 
 import Browser
 import Html exposing (..)
-import Html.Attributes exposing (alt, class, src)
-import Html.Events exposing (onClick)
+import Html.Attributes exposing (alt, class, classList, src)
+import Html.Events exposing (on, onClick)
 import Http
 import Json.Decode as Decode exposing (Decoder)
 
@@ -29,7 +29,10 @@ main =
 type Model
     = Error
     | Loading
-    | Success Advice
+    | Success
+        { advice : Advice
+        , isPointerOver : Bool
+        }
 
 
 type alias Advice =
@@ -49,20 +52,46 @@ init _ =
 
 type Msg
     = GotAdvice (Result Http.Error Advice)
-    | Clicked
+    | ButtonClicked
+    | PointerOver
+    | PointerOut
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         GotAdvice (Ok advice) ->
-            ( Success advice, Cmd.none )
+            case model of
+                Loading ->
+                    ( Success { advice = advice, isPointerOver = False }, Cmd.none )
+
+                Success state ->
+                    ( Success { state | advice = advice }, Cmd.none )
+
+                _ ->
+                    ( model, Cmd.none )
 
         GotAdvice (Err _) ->
             ( Error, Cmd.none )
 
-        Clicked ->
+        ButtonClicked ->
             ( model, getAdvice )
+
+        PointerOver ->
+            case model of
+                Success state ->
+                    ( Success { state | isPointerOver = True }, Cmd.none )
+
+                _ ->
+                    ( model, Cmd.none )
+
+        PointerOut ->
+            case model of
+                Success state ->
+                    ( Success { state | isPointerOver = False }, Cmd.none )
+
+                _ ->
+                    ( model, Cmd.none )
 
 
 
@@ -72,6 +101,20 @@ update msg model =
 subscriptions : Model -> Sub Msg
 subscriptions _ =
     Sub.none
+
+
+
+-- EVENT HANDLERS
+
+
+onPointerOver : msg -> Attribute msg
+onPointerOver msg =
+    on "pointerover" (Decode.succeed msg)
+
+
+onPointerOut : msg -> Attribute msg
+onPointerOut msg =
+    on "pointerout" (Decode.succeed msg)
 
 
 
@@ -87,17 +130,22 @@ view model =
         Loading ->
             main_ [] [ p [] [ text "Loading..." ] ]
 
-        Success advice ->
+        Success state ->
             main_ []
                 [ div {- card container -} [ class "card-container" ]
                     [ h1 []
-                        [ text ("ADVICE #" ++ String.fromInt advice.id) ]
+                        [ text ("ADVICE #" ++ String.fromInt state.advice.id) ]
                     , p []
-                        [ text ("\"" ++ advice.text ++ "\"") ]
+                        [ text ("\"" ++ state.advice.text ++ "\"") ]
                     , div [ class "pattern-divider" ] []
                     ]
                 , div {- button container -} [ class "btn-container" ]
-                    [ button [ onClick Clicked ]
+                    [ button
+                        [ onPointerOver PointerOver
+                        , onPointerOut PointerOut
+                        , onClick ButtonClicked
+                        , classList [ ( "pointer-over", state.isPointerOver ) ]
+                        ]
                         [ img [ src "../public/images/icon-dice.svg", alt "" ] [] ]
                     ]
                 ]
