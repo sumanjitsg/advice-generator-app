@@ -86,7 +86,14 @@ button {
 }
 
 .loading {
-  animation: spin 1s infinite linear;
+  visibility: hidden;
+  animation: appear 0s 1s forwards, spin 1s 1s infinite linear;
+}
+
+@keyframes appear {
+  to {
+    visibility: visible;
+  }
 }
 
 @keyframes spin {
