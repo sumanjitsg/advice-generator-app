@@ -47,7 +47,15 @@ button {
   justify-content: center;
 }
 
-button:hover {
+/* Target devices with precise hover capabilities  */
+@media (hover: hover) {
+  button:hover {
+    filter: drop-shadow(0 0 10px var(--neon-green, #53ffaa));
+  }
+}
+
+/* On touch based devices, add temporary shadow during the tap */
+button:active {
   filter: drop-shadow(0 0 10px var(--neon-green, #53ffaa));
 }
 
