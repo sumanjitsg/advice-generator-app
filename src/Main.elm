@@ -55,8 +55,8 @@ init _ =
 type Msg
     = GotAdvice (Result Http.Error Advice)
     | GetAdvice
-    | PointerOver
-    | PointerOut
+    | PointerOverButton
+    | PointerOutButton
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -95,7 +95,7 @@ update msg model =
                 _ ->
                     ( model, Cmd.none )
 
-        PointerOver ->
+        PointerOverButton ->
             case model of
                 HomePage state ->
                     ( HomePage { state | isPointerOverButton = True }, Cmd.none )
@@ -103,7 +103,7 @@ update msg model =
                 _ ->
                     ( model, Cmd.none )
 
-        PointerOut ->
+        PointerOutButton ->
             case model of
                 HomePage state ->
                     ( HomePage { state | isPointerOverButton = False }, Cmd.none )
@@ -176,8 +176,8 @@ view model =
                     ]
                 , div {- button container -} [ class "btn-container" ]
                     [ button
-                        [ onPointerOver PointerOver
-                        , onPointerOut PointerOut
+                        [ onPointerOver PointerOverButton
+                        , onPointerOut PointerOutButton
                         , onClick GetAdvice
                         , classList [ ( "pointer-over", state.isPointerOverButton ) ]
                         , disabled state.isFetching
