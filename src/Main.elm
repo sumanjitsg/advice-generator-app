@@ -170,12 +170,12 @@ view model =
 
 onPointerOver : msg -> Attribute msg
 onPointerOver msg =
-    on "pointerover" (Decode.succeed msg)
+    on "pointerover" <| Decode.succeed msg
 
 
 onPointerOut : msg -> Attribute msg
 onPointerOut msg =
-    on "pointerout" (Decode.succeed msg)
+    on "pointerout" <| Decode.succeed msg
 
 
 
