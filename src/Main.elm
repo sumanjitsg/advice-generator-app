@@ -37,15 +37,15 @@ type Model
         }
 
 
+init : () -> ( Model, Cmd Msg )
+init _ =
+    ( LoadingPage, getAdvice )
+
+
 type alias Advice =
     { id : Int
     , text : String
     }
-
-
-init : () -> ( Model, Cmd Msg )
-init _ =
-    ( LoadingPage, getAdvice )
 
 
 
@@ -113,20 +113,6 @@ update msg model =
 
 
 
--- EVENT HANDLERS
-
-
-onPointerOver : msg -> Attribute msg
-onPointerOver msg =
-    on "pointerover" (Decode.succeed msg)
-
-
-onPointerOut : msg -> Attribute msg
-onPointerOut msg =
-    on "pointerout" (Decode.succeed msg)
-
-
-
 -- VIEW
 
 
@@ -176,6 +162,20 @@ view model =
                         [ img [ src "../public/images/icon-dice.svg", alt "" ] [] ]
                     ]
                 ]
+
+
+
+-- EVENT HANDLERS
+
+
+onPointerOver : msg -> Attribute msg
+onPointerOver msg =
+    on "pointerover" (Decode.succeed msg)
+
+
+onPointerOut : msg -> Attribute msg
+onPointerOut msg =
+    on "pointerout" (Decode.succeed msg)
 
 
 
