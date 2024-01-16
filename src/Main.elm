@@ -6,6 +6,7 @@ import Html.Attributes exposing (alt, class, classList, src)
 import Html.Events exposing (on, onClick)
 import Http
 import Json.Decode as Decode exposing (Decoder)
+import Phosphor
 
 
 
@@ -125,10 +126,27 @@ view : Model -> Html Msg
 view model =
     case model of
         Error ->
-            main_ [] [ p [] [ text "Error!" ] ]
+            main_ []
+                [ p [ class "error" ]
+                    [ Phosphor.shieldWarning Phosphor.Regular
+                        |> Phosphor.withSize 4
+                        |> Phosphor.withSizeUnit "rem"
+                        |> Phosphor.withClass "error"
+                        |> Phosphor.toHtml []
+                    , div [] [ text "Something went wrong. Check console for more info." ]
+                    ]
+                ]
 
         Loading ->
-            main_ [] [ p [] [ text "Loading..." ] ]
+            main_ []
+                [ p []
+                    [ Phosphor.circleNotch Phosphor.Regular
+                        |> Phosphor.withSize 4
+                        |> Phosphor.withSizeUnit "rem"
+                        |> Phosphor.withClass "loading"
+                        |> Phosphor.toHtml []
+                    ]
+                ]
 
         Success state ->
             main_ []
