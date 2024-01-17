@@ -2,7 +2,7 @@ module Main exposing (main)
 
 import Browser
 import Html exposing (..)
-import Html.Attributes exposing (alt, class, classList, disabled, src)
+import Html.Attributes exposing (alt, attribute, class, classList, disabled, src, title)
 import Html.Events exposing (on, onClick)
 import Http
 import Json.Decode as Decode exposing (Decoder)
@@ -130,7 +130,8 @@ view model =
                     ]
                 , div {- button container -} [ class "btn-container" ]
                     [ button
-                        [ onPointerOver PointerOverButton
+                        [ title "Get New Advice"
+                        , onPointerOver PointerOverButton
                         , onPointerOut PointerOutButton
                         , onClick GetData
                         , classList [ ( "pointer-over", state.isPointerOverButton ) ]
