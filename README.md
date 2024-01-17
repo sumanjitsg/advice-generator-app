@@ -21,3 +21,4 @@ This is a solution to the [Advice generator app challenge on Frontend Mentor](ht
 ### Built with
 
 - Elm
+- CSS
