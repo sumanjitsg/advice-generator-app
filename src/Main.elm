@@ -39,7 +39,7 @@ type Model
 
 init : () -> ( Model, Cmd Msg )
 init _ =
-    ( LoadingPage, getAdvice )
+    ( LoadingPage, getData )
 
 
 type alias Advice =
@@ -53,8 +53,8 @@ type alias Advice =
 
 
 type Msg
-    = GotAdvice (Result Http.Error Advice)
-    | GetAdvice
+    = ReceivedData (Result Http.Error Advice)
+    | GetData
     | PointerOverButton
     | PointerOutButton
 
@@ -62,7 +62,7 @@ type Msg
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        GotAdvice result ->
+        ReceivedData result ->
             case result of
                 Ok advice ->
                     case model of
@@ -87,10 +87,10 @@ update msg model =
                 Err _ ->
                     ( ErrorPage, Cmd.none )
 
-        GetAdvice ->
+        GetData ->
             case model of
                 HomePage state ->
-                    ( HomePage { state | isFetching = True }, getAdvice )
+                    ( HomePage { state | isFetching = True }, getData )
 
                 _ ->
                     ( model, Cmd.none )
@@ -132,7 +132,7 @@ view model =
                     [ button
                         [ onPointerOver PointerOverButton
                         , onPointerOut PointerOutButton
-                        , onClick GetAdvice
+                        , onClick GetData
                         , classList [ ( "pointer-over", state.isPointerOverButton ) ]
                         , disabled state.isFetching
                         ]
@@ -182,11 +182,11 @@ onPointerOut msg =
 {- GET random advice from https://api.adviceslip.com/ -}
 
 
-getAdvice : Cmd Msg
-getAdvice =
+getData : Cmd Msg
+getData =
     Http.get
         { url = "https://api.adviceslip.com/advice"
-        , expect = Http.expectJson GotAdvice adviceDecoder
+        , expect = Http.expectJson ReceivedData responseDecoder
         }
 
 
@@ -204,13 +204,13 @@ getAdvice =
 -}
 
 
+responseDecoder : Decoder Advice
+responseDecoder =
+    Decode.field "slip" adviceDecoder
+
+
 adviceDecoder : Decoder Advice
 adviceDecoder =
-    Decode.field "slip" slipDecoder
-
-
-slipDecoder : Decoder Advice
-slipDecoder =
     Decode.map2
         Advice
         (Decode.field "id" Decode.int)
