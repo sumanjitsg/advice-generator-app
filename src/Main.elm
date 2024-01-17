@@ -186,7 +186,7 @@ onPointerOut msg =
 getData : Cmd Msg
 getData =
     Http.get
-        { url = "https://api.adviceslip.com/advicee"
+        { url = "https://api.adviceslip.com/advice"
         , expect = Http.expectJson ReceivedData responseDecoder
         }
 
