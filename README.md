@@ -14,8 +14,6 @@ This is a solution to the [Advice generator app challenge on Frontend Mentor](ht
 
 ### Features
 
-Users should be able to:
-
 - Generate a new piece of advice by clicking the dice icon
 - Responsive layout
 - Loading and Error pages
