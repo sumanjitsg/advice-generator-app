@@ -4,13 +4,11 @@ This is a solution to the [Advice generator app challenge on Frontend Mentor](ht
 
 ## Overview
 
-### Previews
-
-#### Home Page
+### Home Page Preview
 
 ![Home Page Preview](./public/previews/homepage.png)
 
-#### Error Page
+### Error Page Preview
 
 ![Error Page Preview](./public/previews/errorpage.png)
 
