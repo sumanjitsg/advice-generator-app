@@ -154,7 +154,7 @@ view model =
 
         ErrorPage ->
             main_ []
-                [ p [ class "error" ]
+                [ p []
                     [ Phosphor.shieldWarning Phosphor.Regular
                         |> Phosphor.withSize 4
                         |> Phosphor.withSizeUnit "rem"
@@ -186,7 +186,7 @@ onPointerOut msg =
 getData : Cmd Msg
 getData =
     Http.get
-        { url = "https://api.adviceslip.com/advice"
+        { url = "https://api.adviceslip.com/advicee"
         , expect = Http.expectJson ReceivedData responseDecoder
         }
 

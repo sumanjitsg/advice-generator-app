@@ -86,10 +86,6 @@ button:not(:disabled).pointer-over {
   transform: translateY(-50%);
 }
 
-.error {
-  color: var(--neon-red, #ff3d5a);
-}
-
 .loading {
   visibility: hidden;
   animation: appear 0s 1s forwards, spin 1s 1s infinite linear;
